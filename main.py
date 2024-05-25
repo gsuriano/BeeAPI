@@ -28,7 +28,10 @@ def validate(response: dict, key: str) -> List[float]:
                 measurement = requests.get(sensor_url,timeout=600).json()
                 if measurement['lastMeasurement'] is not None:
                     measurement_time_str = measurement['lastMeasurement']['createdAt']
-                    measument_time = datetime.strptime(measurement_time_str, "%Y-%m-%dT%H:%M:%S.%fZ")
+                    measument_time = datetime.strptime(
+                        measurement_time_str,
+                        "%Y-%m-%dT%H:%M:%S.%fZ"
+                    )
                     if measument_time > now - timedelta(hours=1) :
                         res.append(measurement['lastMeasurement']['value'])
         if len(res) == 3:
