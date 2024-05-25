@@ -64,7 +64,7 @@ jobs:
       - name: Load Docker image
         run: |
           docker load -i beeapi_latest.tar
-          
+
       - name: Run container and execute tests
         run: |
           docker run --name test-container -d beeapi:latest
@@ -75,3 +75,6 @@ jobs:
           docker stop test-container
           docker rm test-container
   
+      - name: OSSF Scorecard action
+        uses: ossf/scorecard-action@v2.3.3
+            
