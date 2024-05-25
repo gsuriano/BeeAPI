@@ -24,7 +24,8 @@ def validate(response: dict, key: str) -> List[float]:
     for sensebox in response:
         for sensor in sensebox["sensors"]:
             if sensor["title"] == key:
-                measurement = requests.get(url + sensebox["_id"]+"/sensors/"+sensor["_id"],timeout=600).json()
+                sensor_url = url + sensebox["_id"]+"/sensors/"+sensor["_id"]
+                measurement = requests.get(sensor_url,timeout=600).json()
                 if measurement['lastMeasurement'] is not None:
                     measurement_time_str = measurement['lastMeasurement']['createdAt']
                     measument_time = datetime.strptime(measurement_time_str, "%Y-%m-%dT%H:%M:%S.%fZ")
