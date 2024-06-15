@@ -1,0 +1,31 @@
+version: '3.8'
+
+services:
+  beeapi:
+    build:
+      context: .  
+      dockerfile: Dockerfile
+    container_name: beeapi
+    ports:
+      - "5000:5000"
+    env_file:
+      - .env
+    networks:
+      - monitoring
+
+  prometheus:
+    image: prom/prometheus
+    container_name: prometheus
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+      - prometheus-data:/prometheus
+    networks:
+      - monitoring
+
+volumes:
+  prometheus-data:
+
+networks:
+  monitoring:

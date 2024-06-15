@@ -67,7 +67,7 @@ jobs:
 
       - name: Run container and execute tests
         run: |
-          docker run --name test-container -d beeapi:latest
+          docker run -e .env --name test-container -d beeapi:latest
           docker exec test-container pytest
 
       - name: Cleanup

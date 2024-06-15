@@ -1,0 +1,23 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: prometheus-config
+  labels:
+    app: prometheus
+data:
+  prometheus.yml: |
+    global:
+      scrape_interval: 15s  # How often to scrape targets by default
+
+    scrape_configs:
+      - job_name: 'beeapi'
+        kubernetes_sd_configs:
+          - role: pod
+        relabel_configs:
+          - source_labels: [__meta_kubernetes_pod_label_app]
+            action: keep
+            regex: beeapi
+          - target_label: __address__
+            replacement: $1:5000
+            source_labels: [__meta_kubernetes_pod_ip]
+        scheme: http
