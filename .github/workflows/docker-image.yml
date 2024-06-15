@@ -58,12 +58,12 @@ jobs:
       - name: Download Docker image artifact
         uses: actions/download-artifact@v4
         with:
-          name: beeapi-image
+          name: beeapi
           path: .
 
       - name: Load Docker image
         run: |
-          docker load -i beeapi_latest.tar
+          docker load -i beeapi.tar
 
       - name: Run container and execute tests
         run: |
