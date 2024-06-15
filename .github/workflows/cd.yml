@@ -1,0 +1,73 @@
+name: Continuous Deployment
+
+on:
+    workflow_run:
+        workflows: ["docker-image.yml"]  # Trigger on successful completion of CI workflow
+        types:
+        - completed
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Checkout the repository to have access to the files
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      # Set up kind (assuming kind is already installed in the environment)
+      - name: Set up kind
+        uses: engineerd/setup-kind@v0.6.0
+
+      # Load Docker image into Kind cluster
+      - name: Load Docker image into Kind
+        run: |
+          docker build -t myapp:latest .
+          kind load docker-image myapp:latest --name kind
+
+      # Install Helm
+      - name: Install Helm
+        run: |
+            curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3
+            chmod 700 get_helm.sh
+            ./get_helm.sh
+
+      # Add Helm repository for NGINX Ingress
+      - name: Add Helm repository for NGINX Ingress
+        run: |
+            helm repo add ingress-nginx https://kubernetes.github.io/ingress-nginx
+            helm repo update
+
+      # Install NGINX Ingress Controller using Helm
+      - name: Install NGINX Ingress Controller
+        run: |
+            helm install nginx-ingress ingress-nginx/ingress-nginx --namespace default --create-namespace
+
+      # Deploy Kubernetes manifests
+      - name: Deploy to Kind cluster
+        run: |
+          kubectl apply -f app-config.yaml
+          kubectl apply -f app-deployment.yaml
+          kubectl apply -f app-ingress.yaml
+          kubectl apply -f app-service.yaml
+          kubectl apply -f kind-config.yaml
+          kubectl apply -f prometheus-clusterrole.yaml
+          kubectl apply -f prometheus-clusterrolebinding.yaml
+          kubectl apply -f prometheus-configmap.yaml
+          kubectl apply -f prometheus-deployment.yaml
+          kubectl apply -f prometheus-service.yaml
+
+      # Save Docker image to GitHub Container Registry
+      - name: Save Docker image to GitHub Container Registry
+        uses: docker/build-push-action@v2
+        with:
+          context: .
+          file: ./Dockerfile
+          push: true
+          tags: |
+            ghcr.io/${{ github.repository_owner }}/myapp:${{ github.sha }}
+
+      # Optional: Clean up resources
+      - name: Clean up Kind resources
+        run: |
+          kind delete cluster --name kind
