@@ -74,6 +74,23 @@ jobs:
         run: |
           docker stop test-container
           docker rm test-container
-  
+      
+  scans:
+    runs-on: ubuntu-latest
+    needs: test
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: SonarQube Quality Gate Check
+        uses: SonarSource/sonarqube-quality-gate-action@v1.1.0
+      
+      - name: Terrascan IaC scanner
+        uses: tenable/terrascan-action@v1.4.1
+        with:
+          iac_type: k8s
+      
+    
+    
 
             
