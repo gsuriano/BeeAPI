@@ -91,7 +91,7 @@ def temperature():
     avg = sum(temperatures) / len(temperatures)
     if avg <= 10:
         status = "Too cold"
-    elif avg <= 36 and avg > 10:
+    elif avg <= 36 :
         status = "Good"
     elif avg > 36:
         status = "Too hot"
