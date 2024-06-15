@@ -2,7 +2,7 @@ name: Continuous Deployment
 
 on:
     workflow_run:
-        workflows: ["docker-image.yml"]  # Trigger on successful completion of CI workflow
+        workflows: ["Docker Image CI"]  # Trigger on successful completion of CI workflow
         types:
         - completed
         branches:
