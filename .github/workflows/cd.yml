@@ -5,6 +5,8 @@ on:
         workflows: ["docker-image.yml"]  # Trigger on successful completion of CI workflow
         types:
         - completed
+        branches:
+        - main
 
 jobs:
   deploy:
@@ -13,17 +15,32 @@ jobs:
     steps:
       # Checkout the repository to have access to the files
       - name: Checkout repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@main
 
-      # Set up kind (assuming kind is already installed in the environment)
-      - name: Set up kind
-        uses: engineerd/setup-kind@v0.6.0
+      # Install Kind
+      - name: Install Kind
+        run: |
+          curl -Lo kind https://kind.sigs.k8s.io/dl/v0.13.1/kind-linux-amd64
+          chmod +x kind
+          sudo mv kind /usr/local/bin/
+
+      # Create Kind cluster
+      - name: Create Kind cluster
+        run: |
+          kind create cluster --name kind
+    
+      # Download Docker image artifact from CI pipeline
+      - name: Download Docker image artifact
+        uses: actions/download-artifact@main
+        with:
+          name: beeapi  # Adjust to the name of the artifact in your CI workflow
+          path: ./beeapi.tar
 
       # Load Docker image into Kind cluster
       - name: Load Docker image into Kind
         run: |
-          docker build -t myapp:latest .
-          kind load docker-image myapp:latest --name kind
+          docker build -t beeapi:latest .
+          kind load docker-image beeapi:latest --name kind
 
       # Install Helm
       - name: Install Helm
@@ -41,21 +58,21 @@ jobs:
       # Install NGINX Ingress Controller using Helm
       - name: Install NGINX Ingress Controller
         run: |
-            helm install nginx-ingress ingress-nginx/ingress-nginx --namespace default --create-namespace
+            helm install nginx-ingress ingress-nginx/ingress-nginx --namespace default 
 
       # Deploy Kubernetes manifests
       - name: Deploy to Kind cluster
         run: |
-          kubectl apply -f app-config.yaml
-          kubectl apply -f app-deployment.yaml
+          kubectl apply -f kind-config.yaml
+          kubectl apply -f app-config.yaml          
           kubectl apply -f app-ingress.yaml
           kubectl apply -f app-service.yaml
-          kubectl apply -f kind-config.yaml
+          kubectl apply -f app-deployment.yaml
           kubectl apply -f prometheus-clusterrole.yaml
           kubectl apply -f prometheus-clusterrolebinding.yaml
           kubectl apply -f prometheus-configmap.yaml
-          kubectl apply -f prometheus-deployment.yaml
           kubectl apply -f prometheus-service.yaml
+          kubectl apply -f prometheus-deployment.yaml
 
       # Save Docker image to GitHub Container Registry
       - name: Save Docker image to GitHub Container Registry
