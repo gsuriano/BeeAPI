@@ -8,5 +8,6 @@ def test_version() -> None:
 
 def test_temperature():
     """Unit test of /temperature endpoint"""
-    expoutput = "Data older than 1 hour whitin 5000 meters"
-    assert requests.get("http://localhost:5000/temperature", timeout=600).text == expoutput
+    response =  requests.get("http://localhost:5000/temperature", timeout=600)
+    assert response.code == 200
+    assert response.json['status'] == "Good"
