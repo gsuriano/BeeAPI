@@ -39,7 +39,7 @@ jobs:
     - name: Build the Docker image
       run: |
         docker build . --file Dockerfile --tag beeapi:latest
-        docker save beeapi:latest -o beeapi_latest.tar
+        docker save beeapi:latest -o beeapi.tar
     
     - name: Upload Docker image as artifact
       uses: actions/upload-artifact@v4
