@@ -9,5 +9,5 @@ def test_version() -> None:
 def test_temperature():
     """Unit test of /temperature endpoint"""
     response =  requests.get("http://localhost:5000/temperature", timeout=600)
-    assert response.code == 200
+    assert response.status_code == 200
     assert response.json['status'] == "Good"
