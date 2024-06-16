@@ -78,7 +78,7 @@ jobs:
           kubectl apply -f prometheus-deployment.yaml
 
       - name: Log in to registry
-        run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+        run: echo "${{ secrets.TOKEN_GITHUB }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
       
         # Save Docker image to GitHub Container Registry
       - name: Save Docker image to GitHub Container Registry
