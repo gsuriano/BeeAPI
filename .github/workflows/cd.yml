@@ -77,13 +77,20 @@ jobs:
           kubectl apply -f prometheus-service.yaml
           kubectl apply -f prometheus-deployment.yaml
 
-      - name: Log in to registry
-        run: echo "${{ secrets.TOKEN_GITHUB }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
-      
-        # Save Docker image to GitHub Container Registry
-      - name: Save Docker image to GitHub Container Registry
-        run: |
-          docker push beeapi:latest
+      - name: Log in to GitHub Container Registry
+        uses: docker/login-action@v1
+        with:
+          registry: ghcr.io
+          username: ${{ github.repository_owner }}
+          password: ${{ secrets.TOKEN_GITHUB }}
+
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v2
+        with:
+          context: .
+          file: ./Dockerfile
+          tags: ghcr.io/${{ github.repository_owner }}/beeapi:latest
+          push: true
 
       # Optional: Clean up resources
       - name: Clean up Kind resources
