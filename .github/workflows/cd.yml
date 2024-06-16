@@ -70,7 +70,6 @@ jobs:
       # Deploy Kubernetes manifests
       - name: Deploy to Kind cluster
         run: |
-          kubectl apply -f kind-config.yaml
           kubectl apply -f app-config.yaml          
           kubectl apply -f app-ingress.yaml
           kubectl apply -f app-service.yaml
