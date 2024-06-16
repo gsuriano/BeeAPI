@@ -55,6 +55,16 @@ jobs:
         run: |
             helm install nginx-ingress ingress-nginx/ingress-nginx --namespace default 
 
+      - name: Verify NGINX Ingress Controller deployment
+        run: |
+          kubectl rollout status deployment/nginx-ingress-ingress-nginx-controller -n default
+    
+      - name: Wait for NGINX Ingress Controller to be ready
+        run: |
+          kubectl wait --namespace default \
+            --for=condition=available deployment/nginx-ingress-ingress-nginx-controller \
+            --timeout=120s
+
       # Deploy Kubernetes manifests
       - name: Deploy to Kind cluster
         run: |      
