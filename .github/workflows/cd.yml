@@ -30,18 +30,6 @@ jobs:
         with:
           github-token: ${{ secrets.TOKEN_GITHUB }} # token with actions:read permissions on target repo
           run-id: 9535098735
-          
-        # id: download-artifact
-        # uses: dawidd6/action-download-artifact@v6
-        # with:
-        #   # Optional, GitHub token, a Personal Access Token with `public_repo` scope if needed
-        #   # Required, if the artifact is from a different repo
-        #   # Required, if the repo is private a Personal Access Token with `repo` scope is needed or GitHub token in a job where the permissions `action` scope set to `read`
-        #   github_token: $ {{secrets.GITHUB_TOKEN}}
-        #   # Optional, workflow file name or ID
-        #   # If not specified, will be inferred from run_id (if run_id is specified), or will be the current workflow
-        #   workflow: Docker Image CI
-        #   search_artifacts: true
 
       # Load Docker image into Kind cluster
       - name: Load Docker image into Kind
@@ -69,8 +57,7 @@ jobs:
 
       # Deploy Kubernetes manifests
       - name: Deploy to Kind cluster
-        run: |
-          kubectl apply -f app-config.yaml          
+        run: |      
           kubectl apply -f app-ingress.yaml
           kubectl apply -f app-service.yaml
           kubectl apply -f app-deployment.yaml
