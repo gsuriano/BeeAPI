@@ -35,7 +35,8 @@ jobs:
           github_token: ${{secrets.GITHUB_TOKEN}}
           # Optional, workflow file name or ID
           # If not specified, will be inferred from run_id (if run_id is specified), or will be the current workflow
-          workflow: docker-image.yml
+          workflow: Docker Image CI
+          search_artifacts: true
 
       # Load Docker image into Kind cluster
       - name: Load Docker image into Kind
