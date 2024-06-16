@@ -83,7 +83,7 @@ jobs:
         # Save Docker image to GitHub Container Registry
       - name: Save Docker image to GitHub Container Registry
         run: |
-          docker push ghcr.io/${{ github.repository_owner }}/beeapi:${{ github.sha }}
+          docker push beeapi:latest
 
       # Optional: Clean up resources
       - name: Clean up Kind resources
