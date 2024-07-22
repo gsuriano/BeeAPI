@@ -91,7 +91,6 @@ def parse_cache(cached_data: str) -> dict:
     if match:
         timestamp_str = match.group(0)
         timestamp = parse_datetime(match)
-        
         # Replace the datetime part in the string with a placeholder
         cached_data = cached_data.replace(timestamp_str, '"TIMESTAMP_PLACEHOLDER"')
 
@@ -156,7 +155,6 @@ def temperature():
             "avg": avg,
             "status": status
             }
-    
     memcached_client.set("temperature", {'value': data, 'timestamp': timestamp}, expire=60)
     return flask.jsonify({
         "data": data,
@@ -196,9 +194,7 @@ def readyz() -> str:
             'status': 400
         }
         return flask.Response(flask.jsonify(response), status=400)
-    
     cached_data = memcached_client.get("temperature")
-    
     if cached_data:
         cached_data = cached_data.decode('utf-8')
         cached_data = parse_cache(cached_data) # Convert string back to dictionary
@@ -211,9 +207,7 @@ def readyz() -> str:
                 'status': 400
             }
             return flask.Response(flask.jsonify(response), status=400)
-    
     return flask.Response("OK")
-
 
 @app.route("/")
 @REQUEST_TIME.time()
