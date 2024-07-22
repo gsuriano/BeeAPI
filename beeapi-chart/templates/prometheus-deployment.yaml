@@ -18,7 +18,7 @@ spec:
       serviceAccountName: prometheus
       containers:
       - name: prometheus
-        image: prom/prometheus
+        image: {{ .Values.prometheus.image.repository }}
         ports:
         - containerPort: 9090
         volumeMounts:

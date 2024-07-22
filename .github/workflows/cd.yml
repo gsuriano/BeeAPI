@@ -53,7 +53,7 @@ jobs:
       # Install NGINX Ingress Controller using Helm
       - name: Install NGINX Ingress Controller
         run: |
-            helm install nginx-ingress ingress-nginx/ingress-nginx --namespace default 
+            helm install nginx-ingress ingress-nginx/ingress-nginx --namespace ingress-nginx --create-namespace --set controller.service.type=NodePort --set controller.service.nodePorts.http=30080 --set controller.service.nodePorts.https=30443
 
       - name: Verify NGINX Ingress Controller deployment
         run: |
@@ -61,21 +61,14 @@ jobs:
     
       - name: Wait for NGINX Ingress Controller to be ready
         run: |
-          kubectl wait --namespace default \
+          kubectl wait --namespace ingress-nginx \
             --for=condition=available deployment/nginx-ingress-ingress-nginx-controller \
             --timeout=120s
 
       # Deploy Kubernetes manifests
       - name: Deploy to Kind cluster
         run: |      
-          kubectl apply -f app-ingress.yaml
-          kubectl apply -f app-service.yaml
-          kubectl apply -f app-deployment.yaml
-          kubectl apply -f prometheus-clusterrole.yaml
-          kubectl apply -f prometheus-clusterrolebinding.yaml
-          kubectl apply -f prometheus-configmap.yaml
-          kubectl apply -f prometheus-service.yaml
-          kubectl apply -f prometheus-deployment.yaml
+          helm install beeapi ./beeapi-chart
 
       - name: Log in to GitHub Container Registry
         uses: docker/login-action@v1

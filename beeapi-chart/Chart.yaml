@@ -1,0 +1,5 @@
+apiVersion: v2
+name: myapp-chart
+description: A Helm chart for deploying beeapi with Prometheus and Memcached
+version: 0.1.0
+appVersion: "1.0"

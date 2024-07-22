@@ -5,7 +5,7 @@ metadata:
   labels:
     app: beeapi
 spec:
-  replicas: 3
+  replicas: {{ .Values.replicaCount }}
   selector:
     matchLabels:
       app: beeapi
@@ -19,13 +19,26 @@ spec:
     spec:
       containers:
       - name: beeapi
-        image: beeapi:latest
+        image: "{{ .Values.beeapi.image.repository }}:{{ .Values.beeapi.image.tag }}"
         imagePullPolicy: IfNotPresent
         ports:
         - containerPort: 5000
         envFrom:
         - configMapRef:
             name: beeapi-config
+        # readinessProbe:
+        #   httpGet:
+        #     path: /readyz
+        #     port: 5000
+        #   initialDelaySeconds: 100
+        #   periodSeconds: 10
+        #   timeoutSeconds: 5
+        #   failureThreshold: 3
+        #   successThreshold: 1
+        # livenessProbe:
+        #   httpGet:
+        #     path: /
+        #     port: 5000
         resources:
           requests:
             memory: "128Mi"

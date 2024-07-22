@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: prometheus
+  labels:
+    app: prometheus
+spec:
+  type: {{ .Values.prometheus.service.type }}
+  ports:
+  - port: {{ .Values.prometheus.service.port }}
+    targetPort: 9090
+    nodePort: {{ .Values.prometheus.service.nodePort }}  # NodePort range is 30000-32767, you can specify any available port in this range
+  selector:
+    app: prometheus

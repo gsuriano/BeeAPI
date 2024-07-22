@@ -1,0 +1,36 @@
+replicaCount: 3
+
+beeapi:
+  image:
+    repository: beeapi
+    tag: latest
+    pullPolicy: IfNotPresent
+  service:
+    type: ClusterIP
+    port: 5000
+
+prometheus:
+  image:
+    repository: prom/prometheus
+  service:
+    type: NodePort
+    port: 9090
+    nodePort: 30090
+
+serviceAccount:
+  create: false
+  name: prometheus
+
+
+memcached:
+  image:
+    repository: memcached
+    tag: 1.6.9
+    pullPolicy: IfNotPresent
+  service:
+    port: 11211
+
+resources: {}
+nodeSelector: {}
+tolerations: []
+affinity: {}
