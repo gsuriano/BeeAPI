@@ -211,7 +211,7 @@ You can get senseBox IDs by checking the [openSenseMap](https://opensensemap.org
 ### 4.4 Infrastructure as Code
 
 - Deploy Grafana agent to collect logs and metrics (Hint: Create [Grafana Cloud](https://grafana.com/products/cloud/) free account to Use Loki and Grafana).
-- Create a Kubernetes cluster using Terraform IaC (Hint: Use free tier from any Cloud provider).
+<!-- - Create a Kubernetes cluster using Terraform IaC (Hint: Use free tier from any Cloud provider). -->
 
 ### 4.5 Continuous Integration
 

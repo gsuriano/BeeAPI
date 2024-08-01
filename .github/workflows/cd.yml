@@ -64,7 +64,18 @@ jobs:
           kubectl wait --namespace ingress-nginx \
             --for=condition=available deployment/nginx-ingress-ingress-nginx-controller \
             --timeout=120s
+      
+      # Add Helm repository for Grafana
+      - name: Add Helm repository for Grafana
+        run: |
+            helm repo add grafana https://grafana.github.io/helm-charts
+            helm repo update
 
+      # Install Grafana with custom config
+      - name: Install Grafana with custom config
+        run: |
+            helm install grafana grafana/grafana -f .\beeapi-chart\grafana-values.yaml
+      
       # Deploy Kubernetes manifests
       - name: Deploy to Kind cluster
         run: |      

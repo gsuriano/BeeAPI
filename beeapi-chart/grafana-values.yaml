@@ -1,0 +1,28 @@
+service:
+  type: NodePort
+  nodePort: 30000 # Replace with the desired node port
+
+datasources:
+  datasources.yaml:
+    apiVersion: 1
+    datasources:
+    - name: Prometheus
+      type: prometheus
+      access: proxy
+      url: http://prometheus.default.svc.cluster.local:9090
+      isDefault: true
+
+persistence:
+  enabled: true
+  storageClassName: ""
+  accessModes:
+    - ReadWriteOnce
+  size: 10Gi
+
+adminUser: admin
+adminPassword: admin # Change this to a secure password
+
+grafana.ini:
+  server:
+    root_url: http://beeapi.local:30000
+    serve_from_sub_path: true
