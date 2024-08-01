@@ -74,7 +74,7 @@ jobs:
       # Install Grafana with custom config
       - name: Install Grafana with custom config
         run: |
-            helm install grafana grafana/grafana -f .\beeapi-chart\grafana-values.yaml
+            helm install grafana grafana/grafana -f ./beeapi-chart/grafana-values.yaml
       
       # Deploy Kubernetes manifests
       - name: Deploy to Kind cluster
