@@ -55,9 +55,9 @@ jobs:
         run: |
             helm install nginx-ingress ingress-nginx/ingress-nginx --namespace ingress-nginx --create-namespace --set controller.service.type=NodePort --set controller.service.nodePorts.http=30080 --set controller.service.nodePorts.https=30443
 
-      - name: Verify NGINX Ingress Controller deployment
-        run: |
-          kubectl rollout status deployment/nginx-ingress-ingress-nginx-controller -n default
+      # - name: Verify NGINX Ingress Controller deployment
+      #   run: |
+      #     kubectl rollout status deployment/nginx-ingress-ingress-nginx-controller -n default
     
       - name: Wait for NGINX Ingress Controller to be ready
         run: |
