@@ -33,7 +33,7 @@ For that reason, this project will be for the bees! I will utilize the technolog
   - [4.4 Infrastructure as Code](#44-infrastructure-as-code)
   - [4.5 Continuous Integration](#45-continuous-integration)
   - [4.6 Continuous Delivery](#46-continuous-delivery)
-- [Phase 5](#phase-5)
+
 
 ## Goal
 
